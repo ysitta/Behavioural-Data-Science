@@ -1,4 +1,4 @@
-# This repository contains
+# Behavioural Data Science
 This repository created for Behavioural Data Science workshop at Psychology Major at UIN Syarif Hidayatullah Jakarta
 
 ## This repository contains
