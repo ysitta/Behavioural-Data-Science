@@ -1,0 +1,1 @@
+"0","kable(votes[sample(1:nrow(votes), 5),c(1,2,3,4)], caption = ""US Votes"") "

@@ -1,0 +1,2 @@
+"0","att <- read.csv(""data_input/attrition.csv"")"
+"0","head(att[,c(1, 2,3,14,18)], 15)"

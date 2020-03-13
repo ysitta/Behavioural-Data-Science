@@ -1,0 +1,4 @@
+"0","library(tidyverse) # to help us do the data wrangling"
+"0","library(caret) # to make a confusion matrix"
+"0","library(e1071) # to build naive bayes model"
+"0","library(rsample) # to do cross validation"

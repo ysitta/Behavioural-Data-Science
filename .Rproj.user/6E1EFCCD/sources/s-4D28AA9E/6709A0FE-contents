@@ -1,0 +1,190 @@
+---
+title: "Introduction to Data Visualization"
+author: "Team Algoritma"
+date: "September 27, 2019"
+output:
+  html_document:
+    css: assets/style.css
+    df_print: paged
+    highlight: tango
+    number_sections: yes
+    theme: flatly
+    toc: yes
+    toc_depth: 3
+    toc_float:
+      collapsed: no
+  pdf_document:
+    latex_engine: xelatex
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE,
+                      message = FALSE,
+                      warning = FALSE)
+```
+
+
+This workshop book is made as complement material for Data Science Role in Industry 4.0 workshop that held by President University major Association Computing. Before we dive into hands-on coding to produce a plot, we have several objectives that will be accomplished by today.
+
+# Objectives
+The main objective of this workshop is to introduce data visualization in R. To reach the main objective, the specific objectives are to the following:   
+1. To introduce R and RStudio in general   
+2. To introduce packages needed to build a visualization   
+3. To produce a plot in R   
+4. To gain insight from plot   
+
+This is a RMarkdown, the tools that provide a documentation friendly for R user. To run the code below, you can click on the `green-triangle-button` on the chunk (the lines that has grey color) or you can just type `ctrl+enter` on your keyboard. To make this document to be access friendly, you can klik `knit` button on the menu at the top. The file will produce a html file so you can read it in mobile or pc eventhough the R and RStudio is not installed. 
+
+Let's begin the R and RStudio experience!
+
+# Load the library needed
+Library or package is the collection of function that will help us work in R. The aims when using library is we do not have to wrote a long function to produce output. The library we used today are ggplot2, plotly, and tidyverse.
+```{r}
+library(ggplot2) # to help us in making plot
+library(plotly) # to make our plot interactive
+library(tidyverse) # to help us do the data wrangling
+library(ggrepel)
+library(stringr)
+```
+
+# Read and inspect the data
+Before we dive deeper on making plots, we should load and inspect our data first to have some knowledge about the data itself. Today, we will use a `recent-grads.csv` data, so we have to load it first. The data that has been available in our folder. We can load the data to our RStudio environment by calling the `read.csv()` function and then assign to object using `<-`.
+```{r}
+major <- read.csv("recent-grads.csv")
+```
+
+Besides, to inspect our data, we can use `str()` function that stands for structure, so we can know a glimpse of our structure data.
+```{r}
+str(major)
+```
+## The explanation about the data
+
+The data has 173 observations and 21 variables. The data is downloaded from [tidytuesday github repository](https://github.com/rfordatascience/tidytuesday/tree/master/data/2018/2018-10-16) about the economic guide to picking a college major in USA. Here is the description of each variables:
+
+- Rank:	Rank by median earnings
+- Major_code:	Major code, FO1DP in ACS PUMS
+- Major: description
+- Major_category:	Category of major from Carnevale et al
+- Total:	Total number of people with major
+- Sample_size:	Sample size (unweighted) of full-time, year-round ONLY (used for earnings)
+- Men:	Male graduates
+- Women:	Female graduates
+- ShareWomen:	Women as share of total
+- Employed:	Number employed (ESR == 1 or 2)
+- Full_time:	Employed 35 hours or more
+- Part_time:	Employed less than 35 hours
+- Full_time_year_round:	Employed at least 50 weeks (WKW == 1) and at least 35 hours (WKHP >= 35)
+- Unemployed:	Number unemployed (ESR == 3)
+- Unemployment_rate:	Unemployed / (Unemployed + Employed)
+- Median:	Median earnings of full-time, year-round workers
+- P25th:	25th percentile of earnigns
+- P75th:	75th percentile of earnings
+- College_jobs:	Number with job requiring a college degree
+- Non_college_jobs:	Number with job not requiring a college degree
+- Low_wage_jobs	Number: in low-wage service jobs
+
+# Know your problem to solve
+As a freshman college students in President University who has majoring in Association Computing want to estimate how competitive our major will be based on the data we have.
+
+
+the potential future jobs availability based on our skills and what kind of jobs
+
+# Data Wrangling
+
+Data wrangling  is the process of transforming and mapping data from one "raw" data form into another format with the intent of making it more appropriate and valuable for a variety of downstream purposes such as analytics. In this phase, we want to reduce our variable/column by removing unnecessary variables. 
+
+Here, we want to do a simple data wrangling, that is change the type of variable and remove the unnnecessary variable 
+```{r}
+major2 <- major %>% 
+  mutate(Major_category = as.factor(Major_category)) %>% 
+  select(-c(1,2))
+```
+
+To answer the problem we have, we should make a limitation to focus on looking the data. Since our major is Association computing, the major category in data that similar with our major is `Computers & Mathematics`. We then filter our data only for `Major Category == "Computers & Mathematics"`
+ 
+```{r}
+comp <- major2 %>% 
+  filter(Major_category == "Computers & Mathematics")
+```
+
+# Hands-on Data Visualization
+
+Data Visualization is the graphical representation of data. To make our first visualization of our data, that usually called by plot. There is a powerful package named `ggplot2` that helps us to make a prettier visualization. 
+
+## Create a canvas
+We make our canvas using `ggplot()` function from `ggplot2` package. In `ggplot()` function, we stored `data =` argument to add the data, and `mapping =` argument to specify our x and y variables.
+
+```{r}
+ggplot(data = comp, mapping = aes(x = Employed, y = Unemployed)) 
+```
+
+## Add a geometrical element
+
+```{r}
+ggplot(comp, aes(Employed, Unemployed)) +
+  geom_point()
+```
+
+## Add another geometrical element
+
+```{r}
+label <- c("COMPUTER SCIENCE", "STATISTICS AND DECISION SCIENCE", "MATHEMATICS AND COMPUTER SCIENCE", "APPLIED MATHEMATICS", "MATHEMATICS")
+```
+
+```{r}
+ggplot(comp, aes(Employed, Unemployed)) +
+  geom_point() +
+  geom_text_repel(aes(label = str_to_title(Major)), data = comp[comp$Major %in% label,])
+```
+
+## Add graphical furniture
+
+```{r}
+ggplot(comp, aes(Employed, Unemployed)) +
+  geom_point(aes(col = Major, size = Low_wage_jobs)) +
+  geom_text_repel(aes(label = str_to_title(Major), col = Major), data = comp[comp$Major %in% label,]) +
+  guides(col = F, size = F)
+```
+
+```{r}
+ggplot(comp, aes(Employed, Unemployed)) +
+  geom_point(aes(col = Major, size = Low_wage_jobs)) +
+  geom_text_repel(aes(label = str_to_title(Major), col = Major), size = 3.5, data = comp[comp$Major %in% label,]) +
+  guides(col = F, size = F)+
+  labs(x = "Number employed", 
+       y = "Number unemployed", 
+       title = "Employed vs Unemployed in Computer and Mathematics Major Category",
+       caption = "Source: Kaggle")
+```
+```{r}
+ggplot(comp, aes(Employed, Unemployed)) +
+  geom_point(aes(col = Major, size = Low_wage_jobs)) +
+  geom_text_repel(aes(label = str_to_title(Major), col = Major), size = 3.5, data = comp[comp$Major %in% label,]) +
+  guides(col = F, size = F)+
+  labs(x = "Number employed", 
+       y = "Number unemployed", 
+       title = "Employed vs Unemployed in Computer and Mathematics Major Category",
+       caption = "Source: Kaggle")
+```
+
+
+```{r}
+ggplot(comp, aes(Employed, Unemployed)) +
+  geom_point(aes(col = Major, size = Low_wage_jobs)) +
+  geom_text_repel(aes(label = str_to_title(Major), col = Major), data = comp[comp$Major %in% label,]) +
+  guides(size = F, col = F) +
+  labs(x = "Number employed", 
+       y = "Number unemployed", 
+       title = "Employed vs Unemployed in Computer and Mathematics Major Category",
+       caption = "Source: Tidy tuesday dataset") +
+  theme(panel.grid = element_blank(),
+        plot.background = element_rect(fill = "black"),
+        panel.background = element_rect(fill = "black"),
+        plot.title = element_text(hjust = 1, face = "bold", colour = "white"),
+        axis.title = element_text(colour = "white", face = "bold"),
+        axis.text = element_text(colour = "white", face = "bold"),
+        legend.title = element_blank(),
+        plot.caption = element_text(colour = "white", face = "bold"))
+```
+
+# Insight

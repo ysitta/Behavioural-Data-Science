@@ -1,0 +1,42 @@
+---
+title: "Untitled"
+author: "Jupiter Day"
+date: "3/12/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+votes <- read.csv("data_input/votes.txt")
+names(votes) <- c("party", 
+                  "hcapped_infants",
+                  "watercost_sharing", 
+                  "adoption_budget_reso",
+                  "physfee_freeze",
+                  "elsalvador_aid",
+                  "religious_grps",
+                  "antisatellite_ban",
+                  "nicaraguan_contras",
+                  "mxmissile",
+                  "immigration",
+                  "synfuels_cutback",
+                  "education_funding",
+                  "superfundright_sue",
+                  "crime",
+                  "dutyfree_exps",
+                  "expadmin_southafr"
+                  )
+```
+
+```{r}
+votes_rep <- votes %>% 
+  filter(party == "republican")
+```
+
+```{r}
+table(votes_rep$education_funding)
+```
+

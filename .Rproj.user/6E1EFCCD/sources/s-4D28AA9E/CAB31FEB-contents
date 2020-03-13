@@ -1,0 +1,355 @@
+---
+title: "How to start connect Data Science with Human resouce"
+author: "Shelloren"
+date: "`r format(Sys.Date(), '%B %e, %Y')`"
+output:
+  revealjs::revealjs_presentation:
+    theme: white
+    highlight: kate
+    center: true
+    progress: true
+    incremental: false
+    css: assets/css/style.css
+    reveal_options:
+      slideNumber: true
+      previewLinks: true
+---
+
+```{r setup, include=FALSE}
+# clean the environment
+rm(list = ls())
+
+# knit settings
+knitr::opts_chunk$set(
+  cache = TRUE,
+  echo = FALSE,
+  message = FALSE,
+  warning = FALSE,
+  fig.asp = 0.5625,
+  fig.align = "center",
+  out.width = "85%",
+  collapse = TRUE,
+  comment = "#>",
+  tidy = TRUE
+)
+
+# import libs
+library(knitr)
+library(lime)
+library(ranger)
+library(tidyverse)
+library(tidymodels)
+
+# # unmentioned dependencies:
+# install.packages("revealjs")
+# remotes::install_github("hadley/emo")
+```
+
+# Disclaimer {#disc}
+
+## {#disc-01}
+
+```{r disc, echo=FALSE, out.width="45%", fig.align="left"}
+include_graphics("assets/img/disc/logo.png")
+```
+
+The following presentation is produced by the team at [Algoritma](https://algorit.ma) for its community events. This presentation is intended for restricted audiences only. It may not be reproduced, distributed, translated or adapted in any form outside these individuals and organizations without permission.
+
+<!-- outlines -->
+
+# Outline {#outline}
+
+## [Introduction to Data Science](#ch-01) {#outline-ch-01}
+
+* [Traditional HR vs People Analytics](#ch-01-01)
+* [Data Science: An Overview and Workflow](#ch-01-02)
+
+## [Data Science for Human Resource](#ch-02) {#outline-ch-02}
+
+* [The Role of Data Science in Human Resource](#ch-02-01)
+* [Some Example Cases](#ch-02-02)
+
+## [Example Use-case: Employee Retention](#ch-03) {#outline-ch-03}
+
+* [Problem Outline](#ch-03-01)
+* [A Peek to Machine Learning Performance](#ch-03-02)
+* [Model Explanation](#ch-03-03)
+
+## [More Example Cases!](#extra-01)
+
+# Get the materials!
+
+---
+
+## Download the materials here: [bit.ly/algo_pa](https://bit.ly/algo_pa)
+
+<!-- contents -->
+
+# Introduction to Data Science {#ch-01}
+
+## Traditional HR vs People Analytics {#ch-01-01}
+
+---
+
+Most of business today are still relying **traditional analytic** OR in this line of work sometimes doing *Analytics* seems as **some-way impossible**.
+
+Most of them **are mainly focused only on examining current employee with out really look back to the historical data**.
+<br/>
+> The expectation from an people analytics are quite difference from its traditional counterpart. **People analytics** are expected to utilize **Data for systematic identification and quantification of the people drivers of business outcomes** - *(Heuvel & Bondarouk, 2016)*
+
+
+## Data Science: An Overview  {#ch-01-02}
+
+---
+
+
+```{r ch-01-01-03, out.width="70%", fig.align="center"}
+include_graphics("assets/img/ch-01/ds-venn.jpg")
+```
+
+---
+
+```{r ch-01-01-04, out.width="70%", fig.align="center"}
+include_graphics("assets/img/ch-01/it-venn.png")
+```
+
+
+## Data Science: Workflow {#ch-01-03}
+
+People analytics are expected to have better **predictive** and **prescriptive** analysis, and i use R programming Languange in most of the steps from preprocessing data to produce report or a demo.
+
+---
+
+```{r ch-01-01-01, out.width="95%", fig.align="center"}
+include_graphics("assets/img/ch-01/dataworkflow.png")
+```
+
+
+# Data Science for Human Resource {#ch-02}
+
+## The Role of Data Science in Human Resource {#ch-02-01}
+
+---
+
+### General use-cases
+
+* Talent Analytics
+* A/B Testing Employee Training
+* Performance based Detection
+* Employee Retention 
+
+---
+
+## Some Example Cases {#ch-02-02}
+
+---
+
+### Google: Employee Retention
+
+
+```{r ch-01-02-01, out.width="75%", fig.align="center", fig.cap= paste( "Forbes.com")}
+include_graphics("assets/img/ch-02/forbse-google-retention.png")
+```
+
+---
+
+### Amazon: Recruiting Bias
+
+
+```{r ch-01-02-02, out.width="75%", fig.align="center", fig.cap= paste("reuters.com")}
+include_graphics("assets/img/ch-02/amazon-ai-recruitment.png")
+```
+
+# Example Use-case: Employee Retention {#ch-03}
+
+## Problem Outline {#ch-03-01}
+
+---
+
+As mentioned in previous part,
+Preventing Attrition 
+is one among popular implementations of People Analytic. In this example, we will use [**"IBM- HR and Performance sample dataset"**](https://www.kaggle.com/pavansubhasht/ibm-hr-analytics-attrition-dataset) to demonstrate the machine learning role for Atrition Prediction process.
+
+---
+
+```{r ch-03-01-01-prep, include=FALSE}
+# import dataset
+data_hr <- read_csv("data/data-hr.csv")
+data_hr_test <- read_csv("data/data-hr-test.csv")
+```
+
+The dataset contains thousands examples of Employee data which Left and stay at the company--in terms of in HR--along with some performance rating and parameter measured during the employement:
+
+<br>
+
+```{r ch-03-01-01}
+# prepare table data
+data_table <- data_hr %>% 
+  mutate(.... = "....") %>% 
+  select(1:4, ...., ncol(data_hr)) %>% 
+  head(5)
+
+# print table
+kable(data_table)
+```
+
+---
+
+Library tha i use:
+
+```{r}
+library(lime)
+library(ranger)
+library(tidyverse)
+library(tidymodels)
+```
+
+<br/>
+
+Data Pre-process with `recipes` library;
+
+```{r eval= FALSE, echo=TRUE}
+
+# define preprocess recipe from train dataset
+rec <- recipe(Attrition ~ ., data = training(splitted)) %>% 
+  step_rm(EmployeeCount, EmployeeNumber) %>%
+  step_nzv(all_predictors()) %>% 
+  step_string2factor(all_nominal(), -Attrition) %>%
+  step_string2factor(Attrition, levels = c("Yes", "No")) %>%
+  step_downsample(Attrition, ratio = 1/1, seed = 1) %>%
+  prep(strings_as_factors = FALSE)
+
+```
+
+## A Peek to Machine Learning Performance {#ch-03-02}
+
+---
+
+Let's build simple model with `tidymodels` library;
+
+```{r echo=TRUE, eval=FALSE}
+# define model specification
+model_spec <- rand_forest(
+  mode = "classification",
+  mtry = 29,
+  trees = 500,
+  min_n = 15
+)
+# define model engine
+model_spec <- set_engine(
+  object = model_spec,
+  engine = "ranger",
+  seed = 100,
+  num.threads = parallel::detectCores() / 2,
+  importance = "impurity"
+)
+# fit the model
+model <- fit_xy(
+  object = model_spec,
+  x = select(data_train, -Attrition),
+  y = select(data_train, Attrition)
+)
+```
+
+---
+
+```{r ch-03-02-01}
+# load model and preprocess recipe
+model <- readRDS("data/model-hr.rds")
+rec <- readRDS("data/rec-hr.rds")
+
+# prepare test dataset
+data_test <- bake(rec, data_hr_test)
+
+# predict on test
+pred_test <- select(data_test, Attrition) %>%
+  bind_cols(predict(model, select(data_test, -Attrition))) %>%
+  bind_cols(predict(model, select(data_test, -Attrition), type = "prob"))
+
+# prepare printing materials
+ap_print <- sum(pred_test$Attrition == "Yes") / nrow(pred_test)
+ap_print <- percent(ap_print)
+
+# 
+sens_print <- sens_vec(truth = pred_test$Attrition, estimate = pred_test$.pred_class)
+sens_print <- percent(sens_print)
+```
+
+
+```{r echo=FALSE}
+# confusion matrix
+pred_test %>%
+  conf_mat(Attrition, .pred_class) %>%
+  autoplot(type = "heatmap")
+```
+
+On a completely unseen dataset, a very baseline model could predict **`r sens_print`** employee attritiom from all observed data. This is very game-changing, since the employee attrition is an anomaly phenomenon which only occurs **`r ap_print`** on this unseen dataset.
+
+## Model Explaination with Lime
+
+Besides the good performance, **we could also use the model to explain: "Why the employee do attrition?"**
+
+<br>
+
+```{r eval=FALSE, echo=TRUE}
+set.seed(1)
+explainer <- lime(x = data_train %>% select(-Attrition), 
+                  model = model)
+
+explanation <- explain(x = data_test %>% select(-Attrition) %>% slice(1:4), 
+                       labels = "Yes",
+                       explainer = explainer, 
+                       n_features = 5)
+```
+
+---
+
+
+```{r ch-03-02-02}
+# choose explanation data
+data_explain <- data_hr_test %>%
+  filter(Attrition == "Yes") %>%
+  head(3)
+
+# set-up preprocess function
+get_features <- function(x) bake(rec, x, -Attrition)
+
+# set-up model as lime's classifier
+lime_model <- as_classifier(model, levels(data_test$Attrition))
+
+# set-up lime explainer
+explainer <- lime(
+  x = data_explain,
+  model = lime_model,
+  preprocess = get_features
+)
+
+# set seed
+set.seed(100)
+
+# get lime explanation
+explanation <- lime::explain(
+  x = data_explain,
+  explainer = explainer,
+  n_labels = 1,
+  n_features = 10
+)
+
+# plot feature explanation
+plot_features(explanation, cases = 3, ncol = 1)
+```
+
+# More Example Cases! {#extra-01}
+
+---
+
+### Want to see more example cases?
+
+Visit our technical blog: [algotech.netlify.com](https://algotech.netlify.com)
+
+OR:
+[my github - AltruiMetavasi                                                                                                                                ](https://github.com/AltruiMetavasi/people_analytic)
+
+<!-- end -->
+
+# See you at [Algoritma](algorit.ma)! `r emo::ji("grin")` {#end}

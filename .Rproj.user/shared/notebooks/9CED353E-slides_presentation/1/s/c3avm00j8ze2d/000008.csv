@@ -1,0 +1,6 @@
+"0","votes_agg <- votes %>% "
+"0","  group_by(party, education_funding, immigration) %>% "
+"0","  summarise(total = n()) %>% "
+"0","  ungroup() %>% "
+"0","  mutate(percentage = paste(total, ""("", round((total/sum(total))*100,2), ""%"", "")""),"
+"0","         party = str_to_title(party))"

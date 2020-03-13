@@ -1,0 +1,330 @@
+---
+title: "Behavioural Data Science"
+author: "Team Algoritma"
+date: "`r Sys.Date()`"
+output: 
+  revealjs::revealjs_presentation:
+    self_contained: false
+    reveal_plugins: ["zoom", "notes", "chalkboard", "menu"]
+    reveal_options:
+      center: TRUE
+      chalkboard: 
+        theme: black
+        css: assets/style.css
+        toggleNotesButton: true
+      menu:
+        numbers: true
+---
+
+```{r, include=FALSE}
+knitr::opts_chunk$set(
+  message = FALSE,
+  warning = FALSE,
+  fig.asp = 0.75,
+  fig.align = "center",
+  out.width = "100%",
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+
+```{r, include=FALSE}
+library(tidyverse)
+library(plotly)
+library(stringi)
+library(knitr)
+library(e1071)
+library(caret)
+library(rsample)
+library(ggthemes)
+library(magick)
+```
+
+# Disclaimer
+
+---
+
+```{r, echo=FALSE, out.width="45%", fig.align="left"}
+knitr::include_graphics("assets/logo.png")
+```
+
+<br>
+<div style="text-align: justify">
+&nbsp;&nbsp;&nbsp;&nbsp; The following presentation is produced by the team at [Algoritma](https://algorit.ma) for Behavioural Data Science workshops at [UIN Syarif Hidayatullah Jakarta](https://www.uinjkt.ac.id/). This presentation is intended for a restricted audience only. It may not be reproduced, distributed, translated or adapted in any form outside these individuals and organizations without permission.
+</div>
+
+---
+
+# Data
+
+---
+
+## Past vs Future data
+![](assets/past_future.PNG)
+
+## Current condition
+![](assets/bigdata.PNG)
+
+
+## Questionnaire
+![](assets/questionnaire.png)
+
+## Tabular Data
+
+```{r echo = F}
+att <- read.csv("data_input/attrition.csv")
+head(att[,c(1, 2,3,14,18)], 15)
+```
+
+---
+
+<div style="text-align: left">
+## Data Analysis
+</div>
+<hr>
+
+<div style="text-align: left">
+* **Conventional**
+<br>
+  Statistical software
+
+* **Data Science**
+<br>
+  Programming language R
+</div>
+
+## Statistical Software vs R Programming
+
+![](assets/spss.png){ width=20% }
+![](assets/excel.png){ width=20% }
+![](assets/minitab.png){ width=55% }
+![](assets/R.png){ width=25% }
+
+---
+
+<div style="text-align: left">
+## What is Data Science?
+</div>
+<hr>
+
+![](assets/data science.png){ width=60% }
+
+<style>
+.reveal section img { background:none; border:none; box-shadow:none; }
+</style>
+
+---
+
+<div style="text-align: left">
+## Psychology X Data Science
+</div>
+<hr>
+![Source: [wisconsin.edu](https://datasciencedegree.wisconsin.edu/blog/combining-psychology-research-methods-and-statistics/)](assets/ds_in_psikologi.PNG){ width=40% }
+![Source: [apa.org](https://www.apa.org/gradpsych/2013/01/big-data)](assets/hot_jobs_psikologi.PNG){ width=55% }
+
+---
+
+## 
+
+![](assets/dataworkflow.png){width='80%'}
+
+---
+
+# Data Visualization
+
+---
+
+<div style="text-align: left">
+## The Goal of Visualization
+</div>
+<hr>
+* **Exploratory**
+<br>
+ to uncover data  
+ to *analyze* data
+<br>
+<br>
+* **Explanatory**
+<br>
+ to communicate data  
+ to *present* data  
+
+---
+
+# Data Visualization Example
+
+---
+
+<div style="text-align: left">
+## Tabular Data
+</div>
+<hr>
+
+```{r echo = F}
+library(stringr)
+set.seed(1020)
+votes <- read.csv("data_input/votes.txt")
+names(votes) <- c("party", 
+                  "hcapped_infants",
+                  "watercost_sharing", 
+                  "adoption_budget_reso",
+                  "physfee_freeze",
+                  "elsalvador_aid",
+                  "religious_grps",
+                  "antisatellite_ban",
+                  "nicaraguan_contras",
+                  "mxmissile",
+                  "immigration",
+                  "synfuels_cutback",
+                  "education_funding",
+                  "superfundright_sue",
+                  "crime",
+                  "dutyfree_exps",
+                  "expadmin_southafr"
+                  )
+```
+
+```{r echo = F}
+kable(votes[sample(1:nrow(votes), 10),c(1,2,3,4)], caption = "US Votes") 
+```
+
+##
+
+```{r echo = F}
+votes_agg <- votes %>% 
+  group_by(party, education_funding, immigration) %>% 
+  summarise(total = n()) %>% 
+  ungroup() %>% 
+  mutate(percentage = paste(total, "(", round((total/sum(total))*100,2), "%", ")"),
+         party = str_to_title(party))
+```
+
+```{r echo = F}
+votes %>% 
+  pivot_longer(cols = -c("party")) %>% 
+  group_by(party, name, value) %>% 
+  summarise(
+    total = n()
+  ) %>% 
+  ungroup() %>% 
+  mutate(name = str_to_title(
+    str_replace_all(name, pattern = "_", replacement = " ")),
+    party = str_to_title(party)) %>% 
+  ggplot(aes(x=name, y=total)) +
+  geom_col(position='fill', aes(fill=value)) +
+  facet_wrap(~party) +
+  coord_flip() +
+  labs(title = "PROPORTION OF DEMOCRAT & REPUBLIC PARTY IN US",
+       x = "Issues",
+       y = "Total",
+       fill = "Votes Result") +
+  scale_fill_manual(values = c("#3c3b6c", "coral", "#b12234")) +
+ # theme_minimal() +
+  theme(
+    legend.position = "bottom", 
+        panel.grid = element_blank(),
+        plot.background = element_rect(fill = "white"),
+        panel.background = element_rect(fill = "white"),
+        axis.title = element_text(colour = "#3c3b6c", face = "bold", size = 14),
+        axis.text = element_text(colour = "#3c3b6c", size = 12),
+        plot.title = element_text(colour = "#3c3b6c", 
+                                  hjust = 0.5, 
+                                  face = "bold", 
+                                  size = 15),
+        strip.background = element_blank(),
+        strip.text = element_text(colour = "#3c3b6c"))
+```
+
+
+# A Brief intro to Machine Learning
+
+---
+
+<div style="text-align: left">
+## Machine Learning
+</div>
+<hr>
+
+![](assets/ml.png){ width=60% }
+
+<div style="text-align: left">
+Gives "computers the ability to learn without being explicitly programmed"
+</div>
+
+<font size="5"><div style="text-align: right">  *Arthur Samuel, 1959* </font></div>
+
+
+---
+
+<div style="text-align: left">
+## Things can be efficient
+</div>
+
+<div style="text-align: left">
+Things can be efficient using Data Science:   
+
+* Number of Surveyor
+* Time
+</div>
+
+---
+
+# Psychological Use-cases
+
+---
+
+## 
+<div style="text-align: left">
+Here are several example of psychological use cases:   
+
+* Talent Analytics
+* Employee Retention 
+* Classify student's learning style
+* Personality traits
+</div>
+
+---
+
+## How Parties in US uses Data Science to Win Election
+
+![](assets/democrat_republican.jpg)
+
+---
+
+# External Links
+
+---
+
+<div style="text-align: left">
+## External Links
+</div>
+<hr>
+
+<div style="text-align: left">
+If you want to explore about R, Data Visualization, and Machine Learning: 
+</div>
+<div style="text-align: left">
+- Guide to [R](https://bookdown.org/ndphillips/YaRrr/)
+</div>
+<div style="text-align: left">
+- Book about [R for data science](https://r4ds.had.co.nz/) 
+</div>
+<div style="text-align: left">
+- Book about [RMarkdown](https://bookdown.org/yihui/rmarkdown/)  
+</div>
+<div style="text-align: left">
+- About [Data Visualization using ggplot2](https://ggplot2.tidyverse.org/)  
+</div>
+<div style="text-align: left">
+- E-book about [machine learning](https://www.dropbox.com/s/e38nil1dnl7481q/machine_learning.pdf?dl=0)
+</div>
+
+---
+
+# Thank you
+
+## 
+If you guys still have any questions, say hi to me at 
+
+sitta@algorit.ma

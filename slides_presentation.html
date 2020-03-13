@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <meta name="author" content="Team Algoritma" />
+  <meta name="dcterms.date" content="2020-03-12" />
+  <title>Behavioural Data Science</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="slides_presentation_files/reveal.js-3.3.0.1/css/reveal.css"/>
+
+
+
+<link rel="stylesheet" href="slides_presentation_files/reveal.js-3.3.0.1/css/theme/simple.css" id="theme">
+
+
+  <!-- some tweaks to reveal css -->
+  <style type="text/css">
+    .reveal h1 { font-size: 2.0em; }
+    .reveal h2 { font-size: 1.5em;  }
+    .reveal h3 { font-size: 1.25em;	}
+    .reveal h4 { font-size: 1em;	}
+
+    .reveal .slides>section,
+    .reveal .slides>section>section {
+      padding: 0px 0px;
+    }
+
+
+
+    .reveal table {
+      border-width: 1px;
+      border-spacing: 2px;
+      border-style: dotted;
+      border-color: gray;
+      border-collapse: collapse;
+      font-size: 0.7em;
+    }
+
+    .reveal table th {
+      border-width: 1px;
+      padding-left: 10px;
+      padding-right: 25px;
+      font-weight: bold;
+      border-style: dotted;
+      border-color: gray;
+    }
+
+    .reveal table td {
+      border-width: 1px;
+      padding-left: 10px;
+      padding-right: 25px;
+      border-style: dotted;
+      border-color: gray;
+    }
+
+    .reveal .slide-menu-button {
+      left: 105px !important;
+    }
+
+  </style>
+
+    <style type="text/css">code{white-space: pre;}</style>
+
+
+<!-- Printing and PDF exports -->
+<script id="paper-css" type="application/dynamic-css">
+
+/* Default Print Stylesheet Template
+   by Rob Glazebrook of CSSnewbie.com
+   Last Updated: June 4, 2008
+
+   Feel free (nay, compelled) to edit, append, and
+   manipulate this file as you see fit. */
+
+
+@media print {
+
+	/* SECTION 1: Set default width, margin, float, and
+	   background. This prevents elements from extending
+	   beyond the edge of the printed page, and prevents
+	   unnecessary background images from printing */
+	html {
+		background: #fff;
+		width: auto;
+		height: auto;
+		overflow: visible;
+	}
+	body {
+		background: #fff;
+		font-size: 20pt;
+		width: auto;
+		height: auto;
+		border: 0;
+		margin: 0 5%;
+		padding: 0;
+		overflow: visible;
+		float: none !important;
+	}
+
+	/* SECTION 2: Remove any elements not needed in print.
+	   This would include navigation, ads, sidebars, etc. */
+	.nestedarrow,
+	.controls,
+	.fork-reveal,
+	.share-reveal,
+	.state-background,
+	.reveal .progress,
+	.reveal .backgrounds {
+		display: none !important;
+	}
+
+	/* SECTION 3: Set body font face, size, and color.
+	   Consider using a serif font for readability. */
+	body, p, td, li, div {
+		font-size: 20pt!important;
+		font-family: Georgia, "Times New Roman", Times, serif !important;
+		color: #000;
+	}
+
+	/* SECTION 4: Set heading font face, sizes, and color.
+	   Differentiate your headings from your body text.
+	   Perhaps use a large sans-serif for distinction. */
+	h1,h2,h3,h4,h5,h6 {
+		color: #000!important;
+		height: auto;
+		line-height: normal;
+		font-family: Georgia, "Times New Roman", Times, serif !important;
+		text-shadow: 0 0 0 #000 !important;
+		text-align: left;
+		letter-spacing: normal;
+	}
+	/* Need to reduce the size of the fonts for printing */
+	h1 { font-size: 28pt !important;  }
+	h2 { font-size: 24pt !important; }
+	h3 { font-size: 22pt !important; }
+	h4 { font-size: 22pt !important; font-variant: small-caps; }
+	h5 { font-size: 21pt !important; }
+	h6 { font-size: 20pt !important; font-style: italic; }
+
+	/* SECTION 5: Make hyperlinks more usable.
+	   Ensure links are underlined, and consider appending
+	   the URL to the end of the link for usability. */
+	a:link,
+	a:visited {
+		color: #000 !important;
+		font-weight: bold;
+		text-decoration: underline;
+	}
+	/*
+	.reveal a:link:after,
+	.reveal a:visited:after {
+		content: " (" attr(href) ") ";
+		color: #222 !important;
+		font-size: 90%;
+	}
+	*/
+
+
+	/* SECTION 6: more reveal.js specific additions by @skypanther */
+	ul, ol, div, p {
+		visibility: visible;
+		position: static;
+		width: auto;
+		height: auto;
+		display: block;
+		overflow: visible;
+		margin: 0;
+		text-align: left !important;
+	}
+	.reveal pre,
+	.reveal table {
+		margin-left: 0;
+		margin-right: 0;
+	}
+	.reveal pre code {
+		padding: 20px;
+		border: 1px solid #ddd;
+	}
+	.reveal blockquote {
+		margin: 20px 0;
+	}
+	.reveal .slides {
+		position: static !important;
+		width: auto !important;
+		height: auto !important;
+
+		left: 0 !important;
+		top: 0 !important;
+		margin-left: 0 !important;
+		margin-top: 0 !important;
+		padding: 0 !important;
+		zoom: 1 !important;
+
+		overflow: visible !important;
+		display: block !important;
+
+		text-align: left !important;
+		-webkit-perspective: none;
+		   -moz-perspective: none;
+		    -ms-perspective: none;
+		        perspective: none;
+
+		-webkit-perspective-origin: 50% 50%;
+		   -moz-perspective-origin: 50% 50%;
+		    -ms-perspective-origin: 50% 50%;
+		        perspective-origin: 50% 50%;
+	}
+	.reveal .slides section {
+		visibility: visible !important;
+		position: static !important;
+		width: auto !important;
+		height: auto !important;
+		display: block !important;
+		overflow: visible !important;
+
+		left: 0 !important;
+		top: 0 !important;
+		margin-left: 0 !important;
+		margin-top: 0 !important;
+		padding: 60px 20px !important;
+		z-index: auto !important;
+
+		opacity: 1 !important;
+
+		page-break-after: always !important;
+
+		-webkit-transform-style: flat !important;
+		   -moz-transform-style: flat !important;
+		    -ms-transform-style: flat !important;
+		        transform-style: flat !important;
+
+		-webkit-transform: none !important;
+		   -moz-transform: none !important;
+		    -ms-transform: none !important;
+		        transform: none !important;
+
+		-webkit-transition: none !important;
+		   -moz-transition: none !important;
+		    -ms-transition: none !important;
+		        transition: none !important;
+	}
+	.reveal .slides section.stack {
+		padding: 0 !important;
+	}
+	.reveal section:last-of-type {
+		page-break-after: avoid !important;
+	}
+	.reveal section .fragment {
+		opacity: 1 !important;
+		visibility: visible !important;
+
+		-webkit-transform: none !important;
+		   -moz-transform: none !important;
+		    -ms-transform: none !important;
+		        transform: none !important;
+	}
+	.reveal section img {
+		display: block;
+		margin: 15px 0px;
+		background: rgba(255,255,255,1);
+		border: 1px solid #666;
+		box-shadow: none;
+	}
+
+	.reveal section small {
+		font-size: 0.8em;
+	}
+
+}  
+</script>
+
+
+<script id="pdf-css" type="application/dynamic-css">
+    
+/**
+ * This stylesheet is used to print reveal.js
+ * presentations to PDF.
+ *
+ * https://github.com/hakimel/reveal.js#pdf-export
+ */
+
+* {
+	-webkit-print-color-adjust: exact;
+}
+
+body {
+	margin: 0 auto !important;
+	border: 0;
+	padding: 0;
+	float: none !important;
+	overflow: visible;
+}
+
+html {
+	width: 100%;
+	height: 100%;
+	overflow: visible;
+}
+
+/* Remove any elements not needed in print. */
+.nestedarrow,
+.reveal .controls,
+.reveal .progress,
+.reveal .playback,
+.reveal.overview,
+.fork-reveal,
+.share-reveal,
+.state-background {
+	display: none !important;
+}
+
+h1, h2, h3, h4, h5, h6 {
+	text-shadow: 0 0 0 #000 !important;
+}
+
+.reveal pre code {
+	overflow: hidden !important;
+	font-family: Courier, 'Courier New', monospace !important;
+}
+
+ul, ol, div, p {
+	visibility: visible;
+	position: static;
+	width: auto;
+	height: auto;
+	display: block;
+	overflow: visible;
+	margin: auto;
+}
+.reveal {
+	width: auto !important;
+	height: auto !important;
+	overflow: hidden !important;
+}
+.reveal .slides {
+	position: static;
+	width: 100%;
+	height: auto;
+
+	left: auto;
+	top: auto;
+	margin: 0 !important;
+	padding: 0 !important;
+
+	overflow: visible;
+	display: block;
+
+	-webkit-perspective: none;
+	   -moz-perspective: none;
+	    -ms-perspective: none;
+	        perspective: none;
+
+	-webkit-perspective-origin: 50% 50%; /* there isn't a none/auto value but 50-50 is the default */
+	   -moz-perspective-origin: 50% 50%;
+	    -ms-perspective-origin: 50% 50%;
+	        perspective-origin: 50% 50%;
+}
+
+.reveal .slides section {
+	page-break-after: always !important;
+
+	visibility: visible !important;
+	position: relative !important;
+	display: block !important;
+	position: relative !important;
+
+	margin: 0 !important;
+	padding: 0 !important;
+	box-sizing: border-box !important;
+	min-height: 1px;
+
+	opacity: 1 !important;
+
+	-webkit-transform-style: flat !important;
+	   -moz-transform-style: flat !important;
+	    -ms-transform-style: flat !important;
+	        transform-style: flat !important;
+
+	-webkit-transform: none !important;
+	   -moz-transform: none !important;
+	    -ms-transform: none !important;
+	        transform: none !important;
+}
+
+.reveal section.stack {
+	margin: 0 !important;
+	padding: 0 !important;
+	page-break-after: avoid !important;
+	height: auto !important;
+	min-height: auto !important;
+}
+
+.reveal img {
+	box-shadow: none;
+}
+
+.reveal .roll {
+	overflow: visible;
+	line-height: 1em;
+}
+
+/* Slide backgrounds are placed inside of their slide when exporting to PDF */
+.reveal section .slide-background {
+	display: block !important;
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	z-index: -1;
+}
+
+/* All elements should be above the slide-background */
+.reveal section>* {
+	position: relative;
+	z-index: 1;
+}
+
+/* Display slide speaker notes when 'showNotes' is enabled */
+.reveal .speaker-notes-pdf {
+	display: block;
+	width: 100%;
+	max-height: none;
+	left: auto;
+	top: auto;
+	z-index: 100;
+}
+
+/* Display slide numbers when 'slideNumber' is enabled */
+.reveal .slide-number-pdf {
+	display: block;
+	position: absolute;
+	font-size: 14px;
+}
+
+</script>
+
+
+<script>
+var style = document.createElement( 'style' );
+style.type = 'text/css';
+var style_script_id = window.location.search.match( /print-pdf/gi ) ? 'pdf-css' : 'paper-css';
+var style_script = document.getElementById(style_script_id).text;
+style.innerHTML = style_script;
+document.getElementsByTagName('head')[0].appendChild(style);
+</script>
+
+    <link href="slides_presentation_files/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+    <link href="slides_presentation_files/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+<section>
+    <h1 class="title">Behavioural Data Science</h1>
+    <h2 class="author">Team Algoritma</h2>
+    <h3 class="date">2020-03-12</h3>
+</section>
+
+<section><section id="disclaimer" class="title-slide slide level1"><h1>Disclaimer</h1></section><section class="slide level2">
+
+<p><img src="assets/logo.png" width="45%" style="display: block; margin: auto auto auto 0;" /></p>
+<br>
+<div style="text-align: justify">
+<p>     The following presentation is produced by the team at <a href="https://algorit.ma">Algoritma</a> for Behavioural Data Science workshops at <a href="https://www.uinjkt.ac.id/">UIN Syarif Hidayatullah Jakarta</a>. This presentation is intended for a restricted audience only. It may not be reproduced, distributed, translated or adapted in any form outside these individuals and organizations without permission.</p>
+</div>
+</section><section class="slide level2">
+
+</section></section>
+<section><section id="data" class="title-slide slide level1"><h1>Data</h1></section><section id="past-vs-future-data" class="slide level2">
+<h2>Past vs Future data</h2>
+<p><img data-src="assets/past_future.PNG" /></p>
+</section><section id="current-condition" class="slide level2">
+<h2>Current condition</h2>
+<p><img data-src="assets/bigdata.PNG" /></p>
+</section><section id="questionnaire" class="slide level2">
+<h2>Questionnaire</h2>
+<p><img data-src="assets/questionnaire.png" /></p>
+</section><section id="tabular-data" class="slide level2">
+<h2>Tabular Data</h2>
+<pre><code>#&gt;    attrition age   business_travel job_involvement marital_status
+#&gt; 1        yes  41     travel_rarely               3         single
+#&gt; 2         no  49 travel_frequently               2        married
+#&gt; 3        yes  37     travel_rarely               2         single
+#&gt; 4         no  33 travel_frequently               3        married
+#&gt; 5         no  27     travel_rarely               3        married
+#&gt; 6         no  32 travel_frequently               3         single
+#&gt; 7         no  59     travel_rarely               4        married
+#&gt; 8         no  30     travel_rarely               3       divorced
+#&gt; 9         no  38 travel_frequently               2         single
+#&gt; 10        no  36     travel_rarely               3        married
+#&gt; 11        no  35     travel_rarely               4        married
+#&gt; 12        no  29     travel_rarely               2         single
+#&gt; 13        no  31     travel_rarely               3       divorced
+#&gt; 14        no  34     travel_rarely               3       divorced
+#&gt; 15       yes  28     travel_rarely               2         single</code></pre>
+</section><section class="slide level2">
+
+<div style="text-align: left">
+<h2 id="data-analysis">Data Analysis</h2>
+</div>
+<hr>
+<div style="text-align: left">
+<ul>
+<li><p><strong>Conventional</strong> <br> Statistical software</p></li>
+<li><strong>Data Science</strong> <br> Programming language R</li>
+</ul>
+</div>
+</section><section id="statistical-software-vs-r-programming" class="slide level2">
+<h2>Statistical Software vs R Programming</h2>
+<p><img data-src="assets/spss.png" style="width:20.0%" /> <img data-src="assets/excel.png" style="width:20.0%" /> <img data-src="assets/minitab.png" style="width:55.0%" /> <img data-src="assets/R.png" style="width:25.0%" /></p>
+</section><section class="slide level2">
+
+<div style="text-align: left">
+<h2 id="what-is-data-science">What is Data Science?</h2>
+</div>
+<hr>
+<p><img data-src="assets/data%20science.png" style="width:60.0%" /></p>
+<style>
+.reveal section img { background:none; border:none; box-shadow:none; }
+</style>
+</section><section class="slide level2">
+
+<div style="text-align: left">
+<h2 id="psychology-x-data-science">Psychology X Data Science</h2>
+</div>
+<hr>
+<p><img data-src="assets/ds_in_psikologi.PNG" alt="Source: wisconsin.edu" style="width:40.0%" /> <img data-src="assets/hot_jobs_psikologi.PNG" alt="Source: apa.org" style="width:55.0%" /></p>
+</section><section id="section" class="slide level2">
+<h2></h2>
+<p><img data-src="assets/dataworkflow.png" style="width:80.0%" /></p>
+</section><section class="slide level2">
+
+</section></section>
+<section><section id="data-visualization" class="title-slide slide level1"><h1>Data Visualization</h1></section><section class="slide level2">
+
+<div style="text-align: left">
+<h2 id="the-goal-of-visualization">The Goal of Visualization</h2>
+</div>
+<hr>
+<ul>
+<li><strong>Exploratory</strong> <br> to uncover data<br />
+to <em>analyze</em> data <br> <br></li>
+<li><strong>Explanatory</strong> <br> to communicate data<br />
+to <em>present</em> data</li>
+</ul>
+</section><section class="slide level2">
+
+</section></section>
+<section><section id="data-visualization-example" class="title-slide slide level1"><h1>Data Visualization Example</h1></section><section class="slide level2">
+
+<div style="text-align: left">
+<h2 id="tabular-data-1">Tabular Data</h2>
+</div>
+<hr>
+<table>
+<caption>US Votes</caption>
+<thead>
+<tr class="header">
+<th></th>
+<th style="text-align: left;">party</th>
+<th style="text-align: left;">hcapped_infants</th>
+<th style="text-align: left;">watercost_sharing</th>
+<th style="text-align: left;">adoption_budget_reso</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>336</td>
+<td style="text-align: left;">democrat</td>
+<td style="text-align: left;">n</td>
+<td style="text-align: left;">n</td>
+<td style="text-align: left;">y</td>
+</tr>
+<tr class="even">
+<td>370</td>
+<td style="text-align: left;">democrat</td>
+<td style="text-align: left;">y</td>
+<td style="text-align: left;">y</td>
+<td style="text-align: left;">y</td>
+</tr>
+<tr class="odd">
+<td>236</td>
+<td style="text-align: left;">democrat</td>
+<td style="text-align: left;">n</td>
+<td style="text-align: left;">n</td>
+<td style="text-align: left;">y</td>
+</tr>
+<tr class="even">
+<td>368</td>
+<td style="text-align: left;">democrat</td>
+<td style="text-align: left;">n</td>
+<td style="text-align: left;">y</td>
+<td style="text-align: left;">y</td>
+</tr>
+<tr class="odd">
+<td>213</td>
+<td style="text-align: left;">democrat</td>
+<td style="text-align: left;">n</td>
+<td style="text-align: left;">y</td>
+<td style="text-align: left;">y</td>
+</tr>
+<tr class="even">
+<td>177</td>
+<td style="text-align: left;">democrat</td>
+<td style="text-align: left;">n</td>
+<td style="text-align: left;">n</td>
+<td style="text-align: left;">y</td>
+</tr>
+<tr class="odd">
+<td>47</td>
+<td style="text-align: left;">democrat</td>
+<td style="text-align: left;">y</td>
+<td style="text-align: left;">n</td>
+<td style="text-align: left;">y</td>
+</tr>
+<tr class="even">
+<td>289</td>
+<td style="text-align: left;">democrat</td>
+<td style="text-align: left;">y</td>
+<td style="text-align: left;">y</td>
+<td style="text-align: left;">y</td>
+</tr>
+<tr class="odd">
+<td>127</td>
+<td style="text-align: left;">democrat</td>
+<td style="text-align: left;">n</td>
+<td style="text-align: left;">?</td>
+<td style="text-align: left;">y</td>
+</tr>
+<tr class="even">
+<td>337</td>
+<td style="text-align: left;">democrat</td>
+<td style="text-align: left;">y</td>
+<td style="text-align: left;">n</td>
+<td style="text-align: left;">y</td>
+</tr>
+</tbody>
+</table>
+</section><section id="section-1" class="slide level2">
+<h2></h2>
+<p><img src="slides_presentation_files/figure-revealjs/unnamed-chunk-8-1.png" width="100%" style="display: block; margin: auto;" /></p>
+</section></section>
+<section><section id="a-brief-intro-to-machine-learning" class="title-slide slide level1"><h1>A Brief intro to Machine Learning</h1></section><section class="slide level2">
+
+<div style="text-align: left">
+<h2 id="machine-learning">Machine Learning</h2>
+</div>
+<hr>
+<p><img data-src="assets/ml.png" style="width:60.0%" /></p>
+<div style="text-align: left">
+<p>Gives “computers the ability to learn without being explicitly programmed”</p>
+</div>
+<font size="5">
+<div style="text-align: right">
+<em>Arthur Samuel, 1959</em> </font>
+</div>
+</section><section class="slide level2">
+
+<div style="text-align: left">
+<h2 id="things-can-be-efficient">Things can be efficient</h2>
+</div>
+<div style="text-align: left">
+<p>Things can be efficient using Data Science:</p>
+<ul>
+<li>Number of Surveyor</li>
+<li>Time</li>
+</ul>
+</div>
+</section><section class="slide level2">
+
+</section></section>
+<section><section id="psychological-use-cases" class="title-slide slide level1"><h1>Psychological Use-cases</h1></section><section id="section-2" class="slide level2">
+<h2></h2>
+<div style="text-align: left">
+<p>Here are several example of psychological use cases:</p>
+<ul>
+<li>Talent Analytics</li>
+<li>Employee Retention</li>
+<li>Classify student’s learning style</li>
+<li>Personality traits</li>
+</ul>
+</div>
+</section><section id="how-parties-in-us-uses-data-science-to-win-election" class="slide level2">
+<h2>How Parties in US uses Data Science to Win Election</h2>
+<p><img data-src="assets/democrat_republican.jpg" /></p>
+</section><section class="slide level2">
+
+</section></section>
+<section><section id="external-links" class="title-slide slide level1"><h1>External Links</h1></section><section class="slide level2">
+
+<div style="text-align: left">
+<h2 id="external-links-1">External Links</h2>
+</div>
+<hr>
+<div style="text-align: left">
+<p>If you want to explore about R, Data Visualization, and Machine Learning:</p>
+</div>
+<div style="text-align: left">
+<ul>
+<li>Book about <a href="https://r4ds.had.co.nz/">R for data science</a></li>
+</ul>
+</div>
+<div style="text-align: left">
+<ul>
+<li>Book about <a href="https://bookdown.org/yihui/rmarkdown/">RMarkdown</a><br />
+</li>
+</ul>
+</div>
+<div style="text-align: left">
+<ul>
+<li>About <a href="https://ggplot2.tidyverse.org/">Data Visualization using ggplot2</a><br />
+</li>
+</ul>
+</div>
+<div style="text-align: left">
+<ul>
+<li>E-book about <a href="https://www.dropbox.com/s/e38nil1dnl7481q/machine_learning.pdf?dl=0">machine learning</a></li>
+</ul>
+</div>
+</section><section class="slide level2">
+
+</section></section>
+<section><section id="thank-you" class="title-slide slide level1"><h1>Thank you</h1></section><section id="section-3" class="slide level2">
+<h2></h2>
+<p>If you guys still have any questions, say hi to me at</p>
+<p><a href="mailto:sitta@algorit.ma" class="email">sitta@algorit.ma</a></p>
+</section></section>
+    </div>
+  </div>
+
+  <script src="slides_presentation_files/reveal.js-3.3.0.1/lib/js/head.min.js"></script>
+  <script src="slides_presentation_files/reveal.js-3.3.0.1/js/reveal.js"></script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://github.com/hakimel/reveal.js#configuration
+      Reveal.initialize({
+        // Push each slide change to the browser history
+        history: true,
+        // Vertical centering of slides
+        center: true,
+        // Transition style
+        transition: 'default', // none/fade/slide/convex/concave/zoom
+        // Transition style for full page slide backgrounds
+        backgroundTransition: 'default', // none/fade/slide/convex/concave/zoom
+
+        menu: {
+          numbers: true,
+          custom: false,
+          themes: false,
+          transitions: false
+        },
+
+
+
+        chalkboard: {
+          toggleNotesButton: true,
+          theme: 'black',
+        },
+
+        keyboard: {
+          67: function() { RevealChalkboard.toggleNotesCanvas() },    // toggle notes canvas when 'c' is pressed
+          66: function() { RevealChalkboard.toggleChalkboard() }, // toggle chalkboard when 'b' is pressed
+          46: function() { RevealChalkboard.clear() },    // clear chalkboard when 'DEL' is pressed
+           8: function() { RevealChalkboard.reset() },    // reset chalkboard data on current slide when 'BACKSPACE' is pressed
+          68: function() { RevealChalkboard.download() }, // downlad recorded chalkboard drawing when 'd' is pressed
+        },
+
+        // Optional reveal.js plugins
+        dependencies: [
+          { src: 'slides_presentation_files/reveal.js-3.3.0.1/plugin/notes/notes.js', async: true },
+          { src: 'slides_presentation_files/reveal.js-3.3.0.1/plugin/zoom-js/zoom.js', async: true },
+          { src: 'slides_presentation_files/reveal.js-3.3.0.1/plugin/chalkboard/chalkboard.js', async: true },
+          { src: 'slides_presentation_files/reveal.js-3.3.0.1/plugin/menu/menu.js', async: true },
+        ]
+      });
+    </script>
+  <!-- dynamically load mathjax for compatibility with self-contained -->
+  <script>
+    (function () {
+      var script = document.createElement("script");
+      script.type = "text/javascript";
+      script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+      document.getElementsByTagName("head")[0].appendChild(script);
+    })();
+  </script>
+
+<script>
+  (function() {
+    if (window.jQuery) {
+      Reveal.addEventListener( 'slidechanged', function(event) {  
+        window.jQuery(event.previousSlide).trigger('hidden');
+        window.jQuery(event.currentSlide).trigger('shown');
+      });
+    }
+  })();
+</script>
+
+
+  </body>
+</html>

@@ -1,0 +1,25 @@
+---
+title: "Untitled"
+author: "Jupiter Day"
+date: "3/12/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(FactoMineR)
+```
+
+```{r}
+v <- read.csv("data_input/votes.txt")
+```
+
+```{r}
+
+
+pca_votes <- PCA(v, scale.unit = T, quali.sup = )
+```
+
