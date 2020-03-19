@@ -1,5 +1,5 @@
 ---
-title: "Behavioural Data Science"
+title: "Behavioral Data Science"
 author: "Team Algoritma"
 date: "`r Sys.Date()`"
 output: 
@@ -38,7 +38,7 @@ library(e1071)
 library(caret)
 library(rsample)
 library(ggthemes)
-library(magick)
+library(RColorBrewer)
 ```
 
 # Disclaimer
@@ -51,7 +51,7 @@ knitr::include_graphics("assets/logo.png")
 
 <br>
 <div style="text-align: justify">
-&nbsp;&nbsp;&nbsp;&nbsp; The following presentation is produced by the team at [Algoritma](https://algorit.ma) for Behavioural Data Science workshops at [UIN Syarif Hidayatullah Jakarta](https://www.uinjkt.ac.id/). This presentation is intended for a restricted audience only. It may not be reproduced, distributed, translated or adapted in any form outside these individuals and organizations without permission.
+&nbsp;&nbsp;&nbsp;&nbsp; The following presentation is produced by the team at [Algoritma](https://algorit.ma) for Behavioral Data Science workshops at [UIN Syarif Hidayatullah Jakarta](https://www.uinjkt.ac.id/). This presentation is intended for a restricted audience only. It may not be reproduced, distributed, translated or adapted in any form outside these individuals and organizations without permission.
 </div>
 
 ---
@@ -63,14 +63,14 @@ knitr::include_graphics("assets/logo.png")
 ## Past vs Future data
 ![](assets/past_future.PNG)
 
-## Current condition
+## Amount of Data
 ![](assets/bigdata.PNG)
 
 
-## Questionnaire
+## One of Psychologycal Data
 ![](assets/questionnaire.png)
 
-## Tabular Data
+## The Data that Computer can Process
 
 ```{r echo = F}
 att <- read.csv("data_input/attrition.csv")
@@ -201,6 +201,7 @@ votes_agg <- votes %>%
 ```
 
 ```{r echo = F}
+library(scales)
 votes %>% 
   pivot_longer(cols = -c("party")) %>% 
   group_by(party, name, value) %>% 
@@ -217,10 +218,12 @@ votes %>%
   coord_flip() +
   labs(title = "PROPORTION OF DEMOCRAT & REPUBLIC PARTY IN US",
        x = "Issues",
-       y = "Total",
-       fill = "Votes Result") +
-  scale_fill_manual(values = c("#3c3b6c", "coral", "#b12234")) +
- # theme_minimal() +
+       y = NULL,
+       fill = "Votes",
+       subtitle = "1984 United States Congressional Voting records") +
+  #scale_fill_manual(values = c("#3c3b6c", "#f5d49e", "#b12234")) +
+  scale_fill_brewer(palette = "Paired") +
+  scale_y_continuous(labels = percent_format(scale = 100, suffix = "%")) +
   theme(
     legend.position = "bottom", 
         panel.grid = element_blank(),
@@ -228,14 +231,14 @@ votes %>%
         panel.background = element_rect(fill = "white"),
         axis.title = element_text(colour = "#3c3b6c", face = "bold", size = 14),
         axis.text = element_text(colour = "#3c3b6c", size = 12),
-        plot.title = element_text(colour = "#3c3b6c", 
-                                  hjust = 0.5, 
-                                  face = "bold", 
-                                  size = 15),
+        plot.title = element_text(colour = "#3c3b6c", hjust = 0.5, 
+                                  face = "bold", size = 15),
+    plot.subtitle = element_text(colour = "#3c3b6c", hjust = 0.5),
         strip.background = element_blank(),
-        strip.text = element_text(colour = "#3c3b6c"))
+        strip.text = element_text(colour = "#3c3b6c"),
+    legend.text = element_text(colour = "#3c3b6c"),
+    legend.title = element_text(colour = "#3c3b6c"))
 ```
-
 
 # A Brief intro to Machine Learning
 
@@ -258,14 +261,14 @@ Gives "computers the ability to learn without being explicitly programmed"
 ---
 
 <div style="text-align: left">
-## Things can be efficient
+## The Advantages
 </div>
 
 <div style="text-align: left">
-Things can be efficient using Data Science:   
+The Advantages of using Data Science:   
 
-* Number of Surveyor
-* Time
+* Efficient in number of surveyor
+* Efficient in time
 </div>
 
 ---
