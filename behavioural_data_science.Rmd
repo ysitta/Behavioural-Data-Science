@@ -1,5 +1,5 @@
 ---
-title: "Psychometrics vs Data Science"
+title: "Behavioral Data Science"
 author: "Yaumil Sitta A"
 date: "3/9/2020"
 output: 
@@ -23,18 +23,18 @@ knitr::opts_chunk$set(echo = TRUE,
                       message = FALSE)
 ```
 
-The following coursebook is produced by the team at [Algoritma](www.algorit.ma) for Behavioural Data Science workshop that held by [UIN Syarif Hidayatullah Jakarta](https://www.uinjkt.ac.id/) majoring Psychology. The coursebook is intended for a restricted audience only, i.e. the individuals and organizations having received this coursebook directly from the training organization. It may not be reproduced, distributed, translated or adapted in any form outside these individuals and organizations without permission.
+The following coursebook is produced by the team at [Algoritma](www.algorit.ma) for Behavioral Data Science workshop that held by [UIN Syarif Hidayatullah Jakarta](https://www.uinjkt.ac.id/) majoring Psychology. The coursebook is intended for a restricted audience only, i.e. the individuals and organizations having received this coursebook directly from the training organization. It may not be reproduced, distributed, translated or adapted in any form outside these individuals and organizations without permission.
 
 Algoritma is a data science education center based in Jakarta. We organize workshops and training programs to help working professionals and students gain mastery in various data science sub-fields: data visualization, machine learning, data modeling, statistical inference etc.
 
 # Objectives
-The main objective of this workshop is to introduce how data science can take a role in psichology industry. To reach the main objective, the specific objectives are to the following:   
+The main objective of this workshop is to introduce how data science can take a role in psychological field. To reach the main objective, the specific objectives are to the following:   
 1. To introduce data science field   
 2. To solve a psychological use case using data science
 
 # About RMarkdown
 
-This is an RMarkdown, tool that provide a documentation friendly for R user. To run the code below, you can click on the `green-triangle-button` on the chunk (the lines that has grey color) or you can just type `ctrl+enter` on your keyboard. To make this document to be access friendly, you can klik `knit` button on the menu at the top. The file will produce a html file so you can read it in mobile or pc eventhough the R and RStudio is not installed. 
+This is an RMarkdown, a tool that provide a documentation friendly for R user. To run the code below, you can click on the `green-triangle-button` on the chunk (the lines that has grey color) or you can just type `ctrl+enter` on your keyboard. To make this document to be accessed friendly, you can click `knit` button on menu at the top of script panel. The output file will produce a html, docx, or pdf file, so you can read it in mobile or pc eventhough the R and RStudio is not installed on those devices. 
 
 Let's begin the R and RStudio experience!
 
@@ -48,10 +48,11 @@ Predicting party affiliation from key votes on social issues
 
 </center>
 
-In this workshop, we will explained about how to classify a person to be a democratic or republican when they have no idea what is their political belief. This kind of classification can be used to win the election by campaigning their party to the right people.
+In this workshop, we will explain on how to classify a person to be a democratic or republican when they have no idea what is their political belief. This kind of classification can be used to win the election by campaigning their party to the right people.
 
 # Load the library needed
-Library or package is the collection of function that will help us work in R. The aims when using library is we do not have to wrote a long function to produce output. The library we used today are tidyverse, caret, and e1071.
+
+Library or package is the collection of function that will help us work in R. The aims when using library is we do not have to write a long function to produce output. The library we used today are tidyverse, caret, e1071, and rsample.
 ```{r}
 library(tidyverse) # to help us do the data wrangling
 library(caret) # to make a confusion matrix
@@ -61,7 +62,7 @@ library(rsample) # to do cross validation
 
 # Read and inspect the data
 
-Before we dive deeper on making a machine learning model, we should load and inspect our data first to have some knowledge about the data itself. Today, we will use a `votes.txt` data, so we have to load it first. The data that has been available in our `data_input` folder. We can load the data to our RStudio environment by calling the `read.csv()` function and then assign to object using assignment operator `<-`.
+Before jumping to create a machine learning model, we should load and inspect our data first to have some knowledge about the data itself. Today, we will use a `votes.txt` data, so we have to load it first. The data itself has been available in our `data_input` folder. We can load the data to our RStudio environment by calling the `read.csv()` function and then assign to object using assignment operator `<-`.
 
 ```{r}
 votes <- read.csv("data_input/votes.txt")
@@ -85,7 +86,7 @@ names(votes) <- c("party",
                   )
 ```
 
-After loaded and named the variabel to be more readable format, we then inspect how our data looks like using `head()` function. The `head()` will show our 6 first observation of our data.
+After loaded and named the variabel to be more readable format, we then inspect how our data looks like using `head()` function. The `head()` will show our 6 first observations of our data.
 
 ```{r}
 head(votes)
@@ -115,7 +116,7 @@ The description of each variable is explained below:
 
 ## Cross Validation
 
-Before we build our machine learning model, we should split our data to be train and test. This activity is called cross validation. The train data used to build our model. The model will learn from the train data that we have given. Then, the test data used to get the model performance.
+Before building our machine learning model, we have to split our data to be `train` and `test` data. This activity is usually called by cross validation. The train data is used to build our model. The model will learn from the train data that we have given. Then, the test data is used to check the model performance.
 
 Here we split the data to be 80% train and 20% test using `initial_split()` function from `rsample` package
 
